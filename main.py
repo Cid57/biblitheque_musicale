@@ -1,22 +1,27 @@
-# connexion à la base de données
+# Connexion à la base de donnée
+
 import mysql.connector
 
-# Remplacez les valeurs suivantes par les informations de votre propre base de données
-host = "votre_host"
-user = "votre_utilisateur"
-password = "votre_mot_de_passe"
-database = "votre_base_de_donnees"
+# # Paramètres de connexion à la base de données
+
+config = {
+    "user": "root",
+    "password": "",
+    "host": "localhost",  # 127.0.0.1
+    "database": "france",
+}
 
 # Établir la connexion à la base de données
-connexion = mysql.connector.connect(
-    host=host, user=user, password=password, database=database
-)
 
-# Verifier si la connexion a réussi
-if connexion.is_connected():
-    print("Connecté à la base de données")
-else:
-    print("Échec de la connexion à la base de données")
+mydb = mysql.connector.connect(**config)
 
-# Fermer la connexion
-connexion.close()
+
+# Init d'un curseur
+mycursor = mydb.cursor(dictionary=True)
+
+mycursor.execute("SELECT * FROM villes_france_free")
+
+liste_villes = mycursor.fetchall()
+
+for ville in liste_villes:
+    print(ville["ville_nom"])
